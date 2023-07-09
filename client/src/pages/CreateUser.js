@@ -19,6 +19,7 @@ const CreateUser = ({ modelopened, setModelOpened }) => {
         setDomain("")
         setGender("") 
         setModelOpened(false);
+        window.location.reload()
        }
        
   return (
@@ -71,21 +72,21 @@ const CreateUser = ({ modelopened, setModelOpened }) => {
           Gender:
           <select value={gender} onChange={(e) => setGender(e.target.value)}>
             <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
         </label>
         <label>
           Domain:
           <select value={domain} onChange={(e) => setDomain(e.target.value)}>
             <option value="">Select</option>
-            <option value="male">Finance</option>
-            <option value="female">Marketing</option>
-            <option value="other">Sales</option>
-            <option value="other">Management</option>
-            <option value="other">IT</option>
-            <option value="other">UI Designing</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Management">Management</option>
+            <option value="IT">IT</option>
+            <option value="UI Designing">UI Designing</option>
           </select>
         </label>
         </div> 
