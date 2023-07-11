@@ -4,8 +4,8 @@ const userModels = require("../models/userModels")
     const createUserController = async(req,res)=>{
    
        try {
-        const {first_name ,last_name ,email, password, gender, domain, avatar, available}= req.body
-        const user =  new userModels({first_name ,last_name,email,password,gender,domain,avatar, available})
+        const {first_name ,last_name ,email, gender, domain, avatar, available}= req.body
+        const user =  new userModels({first_name ,last_name,email,gender,domain,avatar, available})
         await user.save()
         res.status(200).send({
             success:true,
@@ -119,31 +119,7 @@ const ITEM_PER_PAGE= 20
         }
         }
 
-
-        // const updateUserController = async(req,res)=>{
-        // try {
-        //     const {id}=req.params
-            
-          
-        //     if(user){
-        //         res.status(200).json({
-        //             success:true,
-        //             message:"update user",
-        //             user,
-        //           })   
-        //     }else {
-        //             res.status(404).json({ error: 'User not found' });
-        //           }
-            
-        // } catch (error) {
-        //     console.log(error)
-        //       res.status(500).json({
-        //           success:false,
-        //           message:"internal server error",
-        //          error:error
-        //         }) ;  
-        // }
-        // }
+  
 // delete user controller        
     const deleteUserController = async(req,res)=>{
        try {
@@ -168,4 +144,25 @@ const ITEM_PER_PAGE= 20
        }
         }
 
-module.exports={createUserController,createManyUserController,getUserController,getSingleUserController,updateUserController,deleteUserController}
+
+        ///searchUserController
+        const searchUserController = async(req, res) => {
+          try {
+            const {key} = req.params;
+           const user = await userModels.find({
+            $or:[
+              {first_name:{$regex:key, $options:"i"}},
+            ]
+      
+          });
+          res.status(200).json(user)
+          } catch (error) {
+            console.log(error)
+            res.status(500).json(error)
+          }
+          
+      
+      }
+      
+
+module.exports={createUserController,createManyUserController,getUserController,getSingleUserController,updateUserController,deleteUserController,searchUserController}
