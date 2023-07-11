@@ -2,24 +2,33 @@ import React, { useEffect, useState } from 'react'
 import "./Homepage.css"
 import Card from '../component/Card'
 import { useDispatch, useSelector } from 'react-redux'
+import { ToastContainer } from 'react-toastify';
 import { listUser } from '../action/userAction'
 import CreateUser from './CreateUser'
+import axios from 'axios'
+
 const Homepage = () => {
   const [modelopened, setModelOpened] = useState(false);
+  // const [key,setKey]=useState()
+  const[ search,setSearch]=useState(false)
   const [page, setpage]= useState(1)
   const [pagecount,setpagecount]=useState(0)
+  
 const dispatch= useDispatch()
 const userList = useSelector((state)=>state.userList)
 const{loading,error,users}= userList
 
+
+
   useEffect(()=>{
   dispatch(listUser(page))
   },[dispatch,page])
+  
 
   useEffect(()=>{
     if(users){
       setpagecount(users?.pagination?.pagecount)
-   //   console.log(pagecount)
+  
      }
   },[users])
 
@@ -37,12 +46,30 @@ const{loading,error,users}= userList
   })
   }
 
+  //search api
+ const searchHandler = async(e)=>{
+   let key =(e.target.value)
+   if(key){
+    let result =await axios.get(`http://localhost:8080/api/users/search/${key}`)
+    if(result){
+      setSearch(result)
+      console.log(search)
+    }
+   }else{
+    window.location.reload()
+   }
  
+
+  // console.log(users)
+  // console.log(result)
+ }
 
   return (
     <div className='container-fluid'>
+     <ToastContainer className="mx-auto" />
     {/* create user */}
-       <div className='button-container'>
+       <div className='button-container  d-flex col-12 col-md-11 col-lg-9 mx-auto'>
+
        <button  className=" m-3" onClick={() => setModelOpened(true)} >
               create User
             </button>
@@ -51,8 +78,12 @@ const{loading,error,users}= userList
               setModelOpened={setModelOpened}
             />
        </div>
-       <div className=''>
-       </div>
+    <div className="container">
+  <div className="d-flex col-12 col-md-6 col-lg-5 mx-auto">
+    <input className="form-control me-2"  type="search" placeholder="Search"  onChange={searchHandler} />
+  </div>
+</div>
+
 
        {/* card container*/}
        <div className="container">
@@ -62,9 +93,11 @@ const{loading,error,users}= userList
         {loading ? <h2>Loading...</h2> :
      
        <div className="row" >
-       {users?.user?.map((item)=>{
-        return <Card item={item} key={item._id}/>
-       })}
+       {!search ? (users?.user?.map((item)=>{
+        return <Card item={item} key={item._id} />
+       })):(search?.data?.map((item)=>{
+        return <Card item={item} key={item._id} />
+       }))}
        </div>
         }
       
